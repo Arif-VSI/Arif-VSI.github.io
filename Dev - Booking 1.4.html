@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planner Team Input Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 40px;
+            transform: scale(0.8);
+            transform-origin: top left;
+            width: 125%; 
+            height: 125%;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 800px;
+            margin: auto;
+            padding: 40px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            background: #0077cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005fa3;
+        }
+        #submittedData {
+            margin-top: 20px;
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        th, td {
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ddd;
+            white-space: normal;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .action-cell {
+            width: 100px;
+            text-align: center;
+        }
+        .action-cell button {
+            display: block;
+            margin: 2px auto;
+        }
+        .compact {
+            width: 80px;
+        }
+        .narrow {
+            width: 100px;
+        }
+        #pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>PO Release Form</h1>
+<form id="plannerForm">
+    <label for="location">LOCATION:</label>
+    <input type="text" id="location" placeholder="Enter Location" required>
+
+    <label for="submissionDate">FIRST SUBMISSION DATE:</label>
+    <input type="date" id="submissionDate" required>
+
+    <label for="buildWeek">BUILD WEEK:</label>
+    <input type="text" id="buildWeek" placeholder="Insert Build Week" required>
+
+    <label for="vesselWeek">VESSEL WEEK:</label>
+    <input type="number" id="vesselWeek" placeholder="Insert Vessel Week" required>
+
+    <label for="model">MODEL:</label>
+    <input type="text" id="model" placeholder="Insert Model" required>
+
+    <label for="sku">SKU:</label>
+    <input type="text" id="sku" placeholder="Insert SKU" required>
+
+    <label for="qty">QUANTITY:</label>
+    <input type="number" id="qty" placeholder="Insert Quantity" required>
+
+    <label for="containerQty">CONTAINER QUANTITY:</label>
+    <input type="text" id="containerQty" placeholder="Insert Container Quantity" required>
+
+    <label for="PONumber">PO NUMBER:</label>
+    <input type="text" id="PONumber" placeholder="Insert PO Number" required>
+
+    <label for="swDate">SW DATE:</label>
+    <input type="date" id="swDate" required>
+
+    <label for="targetCompleteDate">TARGET COMPLETE DATE:</label>
+    <input type="date" id="targetCompleteDate" required>
+
+    <label for="reasonCode">REASON CODE (Optional):</label>
+    <input type="text" id="reasonCode" placeholder="Insert Reason Code">
+
+    <label for="centuryCode">CENTURY CODE (Optional):</label>
+    <input type="text" id="centuryCode" placeholder="Insert Century Code">
+
+    <label for="bookingRequest">BOOKING REQUEST (Optional):</label>
+    <input type="text" id="bookingRequest" placeholder="Insert Booking Request">
+
+    <label for="carrierBooking">CARRIER BOOKING (Optional):</label>
+    <input type="text" id="carrierBooking" placeholder="Insert Carrier Booking">
+
+    <label for="lastLaden">LAST LADEN DATE (Optional):</label>
+    <input type="date" id="lastLaden">
+
+    <label for="etd">ETD (Optional):</label>
+    <input type="date" id="etd">
+
+    <label for="freeDays">FREE DAYS (Optional):</label>
+    <input type="date" id="freeDays">
+
+    <label for="bookingSubmissionDate">BOOKING SUBMISSION DATE (Optional):</label>
+    <input type="date" id="bookingSubmissionDate">
+
+    <label for="firstBookingRelease">FIRST BOOKING RELEASE (Optional):</label>
+    <input type="date" id="firstBookingRelease">
+
+    <label for="emptyCallIn">EMPTY CALL IN (Optional):</label>
+    <input type="date" id="emptyCallIn">
+
+    <label for="exitFactoryDate">EXIT FACTORY DATE (Optional):</label>
+    <input type="date" id="exitFactoryDate">
+
+    <button type="submit">Submit Details</button>
+</form>
+
+<div id="submittedData">
+    <h3>Submitted Details:</h3>
+    <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterTable()">
+    <table>
+        <thead>
+            <tr>
+                <th>Location</th>
+                <th class="compact">1st Submission Date</th>
+                <th class="compact">Build Week</th>
+                <th class="narrow">Vessel Week</th>
+                <th>Model</th>
+                <th>SKU</th>
+                <th>Qty</th>
+                <th class="compact">Container Qty</th>
+                <th>PO Number</th>
+                <th>SW Date</th>
+                <th class="compact">Target Complete Date</th>
+                <th>Reason Code</th>
+                <th>Century Code</th>
+                <th>Booking Request</th>
+                <th>Carrier Booking</th>
+                <th>Last Laden Date</th>
+                <th>ETD</th>
+                <th>Free Days</th>
+                <th class="compact">Booking Submission Date</th>
+                <th>1st Booking Release</th>
+                <th>Empty Call In</th>
+                <th>Exit Factory Date</th>
+                <th class="action-cell">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="dataList"></tbody>
+    </table>
+
+    <div id="pagination">
+        <button id="prevPage" onclick="changePage(-1)">Previous</button>
+        <span id="pageInfo"></span>
+        <button id="nextPage" onclick="changePage(1)">Next</button>
+    </div>
+
+    <button id="exportButton">Export to Excel</button>
+</div>
+
+<script>
+    let dataEntries = JSON.parse(localStorage.getItem('dataEntries')) || [];
+    let currentPage = 1;
+    const rowsPerPage = 20;
+
+    window.onload = function() {
+        renderTable();
+    };
+
+    document.getElementById('plannerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const today = new Date().toISOString().split('T')[0];
+
+        // Validation for Location
+        const location = document.getElementById('location').value;
+        if (location.length > 20) {
+            alert("Location must be 20 characters or less.");
+            return;
+        }
+
+        // Validation for Submission Date
+        const submissionDate = document.getElementById('submissionDate').value;
+        if (submissionDate < today) {
+            alert("Submission Date cannot be in the past.");
+            return;
+        }
+
+        // Validation for Build Week
+        const buildWeek = document.getElementById('buildWeek').value;
+        if (!buildWeek || buildWeek.length !== 2) {
+            alert("Build Week must be exactly 2 characters.");
+            return;
+        }
+
+        // Validation for Vessel Week
+        const vesselWeek = parseInt(document.getElementById('vesselWeek').value);
+        if (!vesselWeek || vesselWeek < 1 || vesselWeek <= parseInt(buildWeek)) {
+            alert("Vessel Week must be a positive number greater than Build Week.");
+            return;
+        }
+
+        // Validation for Model
+        const model = document.getElementById('model').value;
+        if (!model) {
+            alert("Model cannot be empty.");
+            return;
+        }
+
+        // Validation for SKU
+        const sku = document.getElementById('sku').value;
+        if (!sku) {
+            alert("SKU cannot be empty.");
+            return;
+        }
+
+        // Validation for Quantity
+        const qty = parseInt(document.getElementById('qty').value);
+        if (!qty || qty < 1) {
+            alert("Quantity must be a positive number.");
+            return;
+        }
+
+        // Validation for Container Quantity
+        const containerQty = document.getElementById('containerQty').value;
+        if (!containerQty) {
+            alert("Container Quantity cannot be empty.");
+            return;
+        }
+
+        const newEntry = {
+            location,
+            submissionDate,
+            buildWeek,
+            vesselWeek,
+            model,
+            sku,
+            qty,
+            containerQty,
+            PONumber: document.getElementById('PONumber').value,
+            swDate: document.getElementById('swDate').value,
+            targetCompleteDate: document.getElementById('targetCompleteDate').value,
+            reasonCode: document.getElementById('reasonCode').value,
+            centuryCode: document.getElementById('centuryCode').value,
+            bookingRequest: document.getElementById('bookingRequest').value,
+            carrierBooking: document.getElementById('carrierBooking').value,
+            lastLaden: document.getElementById('lastLaden').value,
+            etd: document.getElementById('etd').value,
+            freeDays: document.getElementById('freeDays').value,
+            bookingSubmissionDate: document.getElementById('bookingSubmissionDate').value,
+            firstBookingRelease: document.getElementById('firstBookingRelease').value,
+            emptyCallIn: document.getElementById('emptyCallIn').value,
+            exitFactoryDate: document.getElementById('exitFactoryDate').value,
+        };
+
+        dataEntries.push(newEntry);
+        localStorage.setItem('dataEntries', JSON.stringify(dataEntries));
+        document.getElementById('plannerForm').reset();
+        renderTable();
+    });
+
+    function renderTable() {
+        const dataList = document.getElementById('dataList');
+        dataList.innerHTML = '';
+
+        const totalPages = Math.ceil(dataEntries.length / rowsPerPage);
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = Math.min(start + rowsPerPage, dataEntries.length);
+
+        for (let i = start; i < end; i++) {
+            const entry = dataEntries[i];
+            const submissionDateHtml = entry.oldSubmissionDate 
+                ? `<span style="text-decoration: line-through; color: black;">${entry.oldSubmissionDate}</span><br><span style="font-weight: bold; color: green;">${entry.submissionDate}</span>` 
+                : `${entry.submissionDate || ''}`;
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${entry.location}</td>
+                <td class="compact">${submissionDateHtml}</td>
+                <td class="compact">${entry.buildWeek || ''}</td>
+                <td class="narrow">${entry.vesselWeek || ''}</td>
+                <td>${entry.model || ''}</td>
+                <td>${entry.sku || ''}</td>
+                <td>${entry.qty || ''}</td>
+                <td class="compact">${entry.containerQty || ''}</td>
+                <td>${entry.PONumber || ''}</td>
+                <td>${entry.swDate || ''}</td>
+                <td class="compact">${entry.targetCompleteDate || ''}</td>
+                <td>${entry.reasonCode || ''}</td>
+                <td>${entry.centuryCode || ''}</td>
+                <td>${entry.bookingRequest || ''}</td>
+                <td>${entry.carrierBooking || ''}</td>
+                <td>${entry.lastLaden || ''}</td>
+                <td>${entry.etd || ''}</td>
+                <td>${entry.freeDays || ''}</td>
+                <td class="compact">${entry.bookingSubmissionDate || ''}</td>
+                <td>${entry.firstBookingRelease || ''}</td>
+                <td>${entry.emptyCallIn || ''}</td>
+                <td>${entry.exitFactoryDate || ''}</td>
+                <td class="action-cell">
+                    <button onclick="editEntry(${i})">Edit</button>
+                    <button onclick="deleteEntry(${i})">Delete</button>
+                </td>
+            `;
+            dataList.appendChild(row);
+        }
+
+        document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+        document.getElementById('prevPage').disabled = currentPage === 1;
+        document.getElementById('nextPage').disabled = currentPage === totalPages;
+    }
+
+    function changePage(direction) {
+        const totalPages = Math.ceil(dataEntries.length / rowsPerPage);
+        currentPage += direction;
+
+        if (currentPage < 1) {
+            currentPage = 1;
+        } else if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        renderTable();
+    }
+
+    function editEntry(index) {
+        const entry = dataEntries[index];
+        // Populate the form with entry data for editing
+        document.getElementById('location').value = entry.location;
+        document.getElementById('submissionDate').value = entry.submissionDate;
+        document.getElementById('buildWeek').value = entry.buildWeek;
+        document.getElementById('vesselWeek').value = entry.vesselWeek;
+        document.getElementById('model').value = entry.model;
+        document.getElementById('sku').value = entry.sku;
+        document.getElementById('qty').value = entry.qty;
+        document.getElementById('containerQty').value = entry.containerQty;
+        document.getElementById('PONumber').value = entry.PONumber;
+        document.getElementById('swDate').value = entry.swDate;
+        document.getElementById('targetCompleteDate').value = entry.targetCompleteDate;
+        document.getElementById('reasonCode').value = entry.reasonCode;
+        document.getElementById('centuryCode').value = entry.centuryCode;
+        document.getElementById('bookingRequest').value = entry.bookingRequest;
+        document.getElementById('carrierBooking').value = entry.carrierBooking;
+        document.getElementById('lastLaden').value = entry.lastLaden;
+        document.getElementById('etd').value = entry.etd;
+        document.getElementById('freeDays').value = entry.freeDays;
+        document.getElementById('bookingSubmissionDate').value = entry.bookingSubmissionDate;
+        document.getElementById('firstBookingRelease').value = entry.firstBookingRelease;
+        document.getElementById('emptyCallIn').value = entry.emptyCallIn;
+        document.getElementById('exitFactoryDate').value = entry.exitFactoryDate;
+
+        // Optionally remove the entry for now, or handle updates differently
+        deleteEntry(index);
+    }
+
+    function deleteEntry(index) {
+        if (confirm('Are you sure you want to delete this entry?')) {
+            dataEntries.splice(index, 1);
+            localStorage.setItem('dataEntries', JSON.stringify(dataEntries));
+            renderTable();
+        }
+    }
+
+    function filterTable() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const filteredEntries = dataEntries.filter(entry =>
+            Object.values(entry).some(value =>
+                String(value).toLowerCase().includes(searchInput)
+            )
+        );
+        dataEntries = filteredEntries;
+        currentPage = 1; // Reset to first page after filtering
+        renderTable();
+    }
+
+    document.getElementById('exportButton').addEventListener('click', function() {
+        // Export logic can be implemented here
+        alert('Export functionality not implemented yet.');
+    });
+</script>
+</body>
+</html>
