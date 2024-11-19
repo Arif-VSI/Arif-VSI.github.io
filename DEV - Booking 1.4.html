@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planner Team Input Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 40px;
+            transform: scale(0.8);
+            transform-origin: top left;
+            width: 125%; 
+            height: 125%;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 800px;
+            margin: auto;
+            padding: 40px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            background: #0077cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005fa3;
+        }
+        #submittedData {
+            margin-top: 20px;
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+            white-space: normal;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .action-cell {
+            width: 100px;
+            text-align: center;
+	    vertical-align: middle;
+        }
+        .action-cell button {
+            display: inline-block;
+            margin: 2px auto;
+        }
+        .compact { width: 80px; }
+
+        .narrow {
+            width: 100px;
+        }
+	.strikethrough { 
+	   text-decoration: line-through; 
+	   color: gray; 
+	}
+	.new-date { 
+	    font-weight: bold; 
+	    color: green; 
+	}
+
+        #pagination { text-align: center; margin-top: 20px; }
+         
+        
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<h1>PO Release Form</h1>
+<form id="plannerForm">
+    <label for="location">LOCATION:</label>
+    <input type="text" id="location" title="Enter Location" placeholder="Enter Location" required>
+    
+    <label for="submissionDate">FIRST SUBMISSION DATE:</label>
+    <input type="date" id="submissionDate" title="Select First Submission Date" required>
+    
+    <label for="buildWeek">BUILD WEEK:</label>
+    <input type="text" id="buildWeek" title="Insert Build Week" placeholder="Insert Build Week" required>
+    
+    <label for="vesselWeek">VESSEL WEEK:</label>
+    <input type="number" id="vesselWeek" title="Insert Vessel Week" placeholder="Insert Vessel Week" required>
+    
+    <label for="model">MODEL:</label>
+    <input type="text" id="model" title="Insert Model" placeholder="Insert Model" required>
+    
+    <label for="sku">SKU:</label>
+    <input type="text" id="sku" title="Insert SKU" placeholder="Insert SKU" required>
+    
+    <label for="qty">QUANTITY:</label>
+    <input type="number" id="qty" title="Insert Quantity" placeholder="Insert Quantity" required>
+    
+    <label for="containerQty">CONTAINER QUANTITY:</label>
+    <input type="text" id="containerQty" title="Insert Container Quantity" placeholder="Insert Container Quantity" required>
+    
+    <label for="PONumber">PO NUMBER:</label>
+    <input type="text" id="PONumber" title="Insert PO Number" placeholder="Insert PO Number" required>
+    
+    <label for="swDate">SHIP WINDOW DATE:</label>
+    <input type="date" id="swDate" title="Select Ship Window Date" required>
+    
+    <label for="targetCompleteDate">TARGET COMPLETE DATE:</label>
+    <input type="date" id="targetCompleteDate" title="Select Target Complete Date" required>
+    
+    <label>REASON CODE (Optional):</label>
+    <input type="text" id="reasonCode" title="Insert Reason Code" placeholder="Insert Reason Code">
+    
+    <label>CENTURY CODE (Optional):</label>
+    <input type="text" id="centuryCode" title="Insert Century Code" placeholder="Insert Century Code">
+    
+    <label>BOOKING REQUEST (Optional):</label>
+    <input type="text" id="bookingRequest" title="Insert Booking Request" placeholder="Insert Booking Request">
+    
+    <label>CARRIER BOOKING (Optional):</label>
+    <input type="text" id="carrierBooking" title="Insert Carrier Booking" placeholder="Insert Carrier Booking">
+    
+    <label>LAST LADEN DATE (Optional):</label>
+    <input type="date" id="lastLaden" title="Select Last Laden Date">
+    
+    <label>ETD (Optional):</label>
+    <input type="date" id="etd" title="Select ETD">
+    
+    <label>FREE DAYS (Optional):</label>
+    <input type="date" id="freeDays" title="Select Free Days">
+    
+    <label>BOOKING SUBMISSION DATE (Optional):</label>
+    <input type="date" id="bookingSubmissionDate" title="Select Booking Submission Date">
+    
+    <label>FIRST BOOKING RELEASE (Optional):</label>
+    <input type="date" id="firstBookingRelease" title="Select First Booking Release Date">
+    
+    <label>EMPTY CALL IN (Optional):</label>
+    <input type="date" id="emptyCallIn" title="Select Empty Call In Date">
+    
+    <label>EXIT FACTORY DATE (Optional):</label>
+    <input type="date" id="exitFactoryDate" title="Select Exit Factory Date">
+
+    <button type="submit">Submit Details</button>
+
+</form>
+
+<div id="submittedData">
+    <h3>Submitted Details:</h3>
+    <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterTable()">
+    <table>
+        <thead>
+            <tr>
+                <th>Location</th>
+                <th class="compact">1st Submission Date</th>
+                <th class="compact">Build Week</th>
+                <th class="narrow">Vessel Week</th>
+                <th>Model</th>
+                <th>SKU</th>
+                <th>Qty</th>
+                <th class="compact">Container Qty</th>
+                <th>PO Number</th>
+                <th>SW Date</th>
+                <th class="compact">Target Complete Date</th>
+                <th>Reason Code</th> <!-- Added header for Reason Code -->
+                <th>Century Code</th> <!-- Added header for Century Code -->
+                <th>Booking Request</th> <!-- Added header for Booking Request -->
+                <th>Carrier Booking</th>
+                <th>Last Laden</th>
+                <th>ETD</th>
+                <th>Free Days</th>
+                <th class="compact">Booking Submission Date</th>
+                <th class="compact">1st Booking Release</th>
+                <th>Empty Call In</th>
+                <th>Exit Factory Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="dataList"></tbody>
+    </table>
+
+    <div id="pagination">
+        <button id="prevPage" onclick="changePage(-1)">Previous</button>
+        <span id="pageInfo"></span>
+        <button id="nextPage" onclick="changePage(1)">Next</button>
+    </div>
+    <button id="exportButton">Export to Excel</button>
+</div>
+
+<script>
+    let dataEntries = JSON.parse(localStorage.getItem('dataEntries')) || [];
+    let currentPage = 1;
+    const rowsPerPage = 15;
+    let editIndex = null;
+
+    window.onload = function() {
+    	dataEntries = JSON.parse(localStorage.getItem('dataEntries')) || [];
+
+    	dataEntries = dataEntries.map(entry => {
+            if (!entry.originalSubmissionDate) {
+               entry.originalSubmissionDate = entry.submissionDate;
+	    }
+	    return entry;
+    	});
+
+    	localStorage.setItem('dataEntries', JSON.stringify(dataEntries));
+
+	renderTable();
+     };
+
+    document.getElementById('plannerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+	console.log("Form submitted!");
+
+        const newEntry = Array.from(this.elements).reduce((acc, input) => {
+            if (input.id) acc[input.id] = input.value;
+            return acc;
+        }, {});
+
+        if (validateEntry(newEntry)) {  
+	   if (editIndex !== null) {
+	       const existingEntry = dataEntries[editIndex];
+	       if (existingEntry.submissionDate !== newEntry.submissionDate) {
+		  newEntry.originalSubmissionDate = existingEntry.submissionDate;
+	       } else {
+		  newEntry.originalSubmissionDate = existingEntry.originalSubmissionDate;
+	       }
+
+               dataEntries[editIndex] = newEntry;
+               editIndex = null;
+	       alert("Edit successful!");
+           } else {
+              newEntry.originalSubmissionDate = newEntry.submissionDate;
+	      dataEntries.push(newEntry);
+	      alert("Submission successful!");
+	   }
+
+           localStorage.setItem('dataEntries', JSON.stringify(dataEntries));
+           this.reset();
+           renderTable();
+        }
+    });
+
+    function renderTable() {
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedEntries = dataEntries.slice(start, end);
+        const dataList = document.getElementById('dataList');
+        dataList.innerHTML = '';
+
+        paginatedEntries.forEach((entry, index) => {
+            const row = document.createElement('tr');
+
+            Object.keys(entry).forEach(key => {
+                const cell = document.createElement('td');
+
+            	if (key === 'submissionDate') {
+                    if (entry.originalSubmissionDate && entry.originalSubmissionDate !== entry.submissionDate) {
+                       	cell.innerHTML = `<span class="strikethrough">${entry.originalSubmissionDate}</span> <br> 
+                                      	  <span class="new-date">${entry.submissionDate}</span>`;
+
+                    } else {
+                    	cell.innerHTML = `<span class="new-date">${entry.submissionDate}</span>`;
+		    }
+            	} else if (key !== 'originalSubmissionDate') {
+                    cell.textContent = entry[key];
+		}
+
+                row.appendChild(cell);
+            });
+
+            const actionCell = document.createElement('td');
+            actionCell.className = 'action-cell';
+
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Edit';
+            editButton.onclick = () => editEntry(index + start);
+            actionCell.appendChild(editButton);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.onclick = () => deleteEntry(index + start);
+            actionCell.appendChild(deleteButton);
+
+            row.appendChild(actionCell);
+            dataList.appendChild(row);
+        });
+        updatePagination();
+    }
+
+    function updatePagination() {
+        const pageInfo = document.getElementById('pageInfo');
+        const totalPages = Math.ceil(dataEntries.length / rowsPerPage);
+        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        document.getElementById('prevPage').disabled = currentPage === 1;
+        document.getElementById('nextPage').disabled = currentPage === totalPages;
+    }
+
+    function changePage(direction) {
+        currentPage += direction;
+        renderTable();
+    }
+
+    function deleteEntry(index) {
+        dataEntries.splice(index, 1);
+        localStorage.setItem('dataEntries', JSON.stringify(dataEntries));
+        renderTable();
+    }
+
+    function editEntry(index) {
+        const entry = dataEntries[index];
+        Object.keys(entry).forEach(key => {
+            if (document.getElementById(key)) {
+            	document.getElementById(key).value = entry[key];
+	    }
+        });
+	editIndex = index;
+    }
+
+    function filterTable() {
+        const searchValue = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('#dataList tr');
+        rows.forEach(row => {
+            const cells = row.getElementsByTagName('td');
+            const rowContainsSearchValue = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchValue));
+            row.style.display = rowContainsSearchValue ? '' : 'none';
+        });
+    }
+
+    document.getElementById('exportButton').addEventListener('click', function() {
+        const worksheet = XLSX.utils.json_to_sheet(dataEntries);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'DataEntries');
+        XLSX.writeFile(workbook, 'dataEntries.xlsx');
+    });
+
+    function validateEntry(entry) {
+        const today = new Date().toISOString().split('T')[0];
+        let errorMessages = [];
+
+        if (entry.location.length > 20) errorMessages.push("Location must be 20 characters or less.");
+        if (entry.submissionDate < today) errorMessages.push("Submission Date cannot be in the past.");
+        if (entry.buildWeek.length !== 2) errorMessages.push("Build Week must be exactly 2 characters.");
+        if (entry.vesselWeek <= entry.buildWeek) errorMessages.push("Vessel Week must be greater than Build Week.");
+        if (entry.qty <= 0) errorMessages.push("Quantity must be a positive number.");
+
+        if (errorMessages.length > 0) {
+            alert(errorMessages.join('\n'));
+            return false;
+
+        }
+        return true;
+    }
+</script>
+</body>
+</html>
